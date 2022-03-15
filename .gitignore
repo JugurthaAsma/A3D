@@ -1,0 +1,13 @@
+/bin
+/build
+/dist
+/lib
+/nbproject
+/test
+/.classpath
+/manifest.mf
+/Makefile.win
+/Makefile.unx
+/hs_err_pid10036.log
+/build.xml
+/.project
