@@ -31,7 +31,6 @@ public class Room {
     float[] vertexpos;
     float[] textures;
     
-    
     FloatBuffer posbuffer;
     
     MyVBO floorVbo;
@@ -174,57 +173,73 @@ public class Room {
         };
         
         textures = new float[] {
-           //sol
-            0.F,1.F,//-3.F, 0F, 3.F,//0 - p0
-            1.F,1.F,//3.F, 0.F, 3.F,//1 - p1
-            1.F,0.F,//3.F, 0.F, -3.F,//p2
-            0.F,0.F,//-3.F, 0F, -3.F,//p3
+            // frontWall
+            
+            //left
+            0, 0,
+            1, 0,
+            1, 1,
+            0, 1,
+            
+            //right
+            0, 0,
+            1, 0,
+            1, 1,
+            0, 1,
+            
+            // backWall
+            0, 0,
+            1, 0,
+            1, 1,
+            0, 1,
+            
+            // righttWall
+            0, 0,
+            1, 0,
+            1, 1,
+            0, 1,
+            
+            // b1 c1 , c1 c2, c2 b2, b2 b1
+            //13,14,  14,15,  15,12,  12,13
 
-            //plafond
-            0.F,1.F,//-3.F, 2.5F, 3.F,//p4
-            1.F,1.F,//3.F, 2.5F, 3.F,//p5
-            1.F,0.F,//3.F, 2.5F, -3.F,//p6
-            0.F,0.F,//-3.F, 2.5F, -3.F,//p7
-
-
-            //wall DROIT
-            1.F,1.F,//3.F, 0.F, 3.F,// 8 - P1
-            0.F,1.F,//3.F, 0.F, -3.F,// 9 - p2
-            0.F,0.F,//3.F, 2.5F, -3.F,// 10- p6
-            1.F,0.F,//3.F, 2.5F, 3.F,// 11- p5
-
-
-            //wall gauche
-            1.F,1.F,//-3.F, 0.F, 3.F,//12 - P0
-            0.F,1.F,//-3.F, 0.F, -3.F,//13- P3
-            0.F,0.F,//-3.F, 2.5F, -3.F,//14- p7
-            1.F,0.F,//-3.F, 2.5F, 3.F,// 15 - p4
-
-
-            //wall du fond
-            0.F,1.F,//-3.F, 0.F, -3.F,//16- P3
-            1.F,1.F,//3.F, 0.F, -3.F,//17 -p2
-            1.F,0.F,// 3.F, 2.5F, -3.F,//18 - p6
-            0.F,0.F,//-3.F, 2.5F, -3.F,//19- p7
-
-            //porte
+            // lefttWall
+            0, 0,
+            1, 0,
+            1, 1,
+            0, 1,
+            
+            // floor
+            0, 0,
+            1, 0,
+            1, 1,
+            0, 1,
+            
+            // ceilling
+            0, 0,
+            1, 0,
+            1, 1,
+            0, 1,
+            
+            // upper
+            0.5F, 0,
+            0, 0,
+            0, 0.5F,
+            0.5F, 0.5F,
+            /*
             0.417F,1.F,//-0.5F, 0.F, -3.F,//20- p8
             0.584F,1.F,//0.5F, 0.F, -3.F,//21 - p9
             0.584F,0.2F,//p10//0.5F, 2.F, -3.F,//22 - p10
             0.417F, 0.2F,//p11//-0.5F, 2.F, -3.F,//23 - p11
-
-            //wall d avant
-            0.F,1.F,// -3.F, 0.F, 3.F,//24- P0
-            1.F,1.F,//3.F, 0.F, 3.F,//25- p1
-            1.F,0.F,//3.F, 2.5F, 3.F,//26 - p5
-            0.F,0.F//-3.F, 2.5F, 3.F,//27 - p4
+            
+            */
         };
         
         
         
-        floorVbo = new MyVBO(gl, vertexpos, floorTriangles, texture);
-        ceillingVbo = new MyVBO(gl, vertexpos, ceillingTriangles, texture);
-        wallsVbo = new MyVBO(gl, vertexpos, wallsTsriangles, texture);
+        floorVbo = new MyVBO(gl, vertexpos, floorTriangles, texture, textures);
+        ceillingVbo = new MyVBO(gl, vertexpos, ceillingTriangles, texture, textures);
+        wallsVbo = new MyVBO(gl, vertexpos, wallsTsriangles, texture, textures);
+        
         //bordersVbo = new MyVBO(gl, vertexpos, bordersLines);
         
 

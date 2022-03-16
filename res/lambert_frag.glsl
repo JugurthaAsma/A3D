@@ -21,17 +21,21 @@ varying vec4 vLightColor;
 varying vec2 vTexCoord;
 
 void main(void) {
-    if(uIsTexture){
+
+    vec4 texture = vec4(1, 1, 1, 1);
+    if (uIsTexture) {
+        texture = texture2D(uTextureUnit,vTexCoord);
+    }
+
+    if(uLighting){
         vec3 normal = uNormalMatrix * vVertexNormal;
         if (uNormalizing) normal=normalize(normal);
         vec3 lightdir=normalize(uLightPos - vVertexPosition.xyz);
         float weight = max(dot(normal, lightdir),0.0);
-        if (uLighting) {
-            gl_FragColor = (uMaterialColor*texture2D(uTextureUnit,vTexCoord))*(uAmbiantLight+weight*uLightColor);
-        }else{
-            gl_FragColor = uMaterialColor*texture2D(uTextureUnit,vTexCoord);
-        }
-    } else {
-        gl_FragColor = uMaterialColor;
+        
+        gl_FragColor = (uMaterialColor*texture)*(uAmbiantLight+weight*uLightColor);
+    }else{
+        gl_FragColor = uMaterialColor*texture;
     }
+    
 }

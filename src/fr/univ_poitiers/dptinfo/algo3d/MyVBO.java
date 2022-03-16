@@ -35,7 +35,10 @@ public class MyVBO {
 
 
     
-    public MyVBO(final GL2 gl, float[] vertexpos, short[] shortTriangles, Texture texture) {
+    public MyVBO(final GL2 gl, float[] vertexpos, short[] shortTriangles, Texture texture, float[] textures) {
+        if (textures != null) {
+            this.textures = textures;
+        }
         this.texture = texture;
         this.gl = gl;
         this.vertexpos = vertexpos;
@@ -50,6 +53,10 @@ public class MyVBO {
         allocateTriangleBuffer();
         allocateNormalsBuffer();
         allocateTextureBuffer();
+    }
+    
+    public MyVBO(final GL2 gl, float[] vertexpos, short[] shortTriangles, Texture texture) {
+        this(gl, vertexpos, shortTriangles, texture, null);
     }
     
     public MyVBO(final GL2 gl, float[] vertexpos, short[] shortTriangles) {
@@ -89,16 +96,18 @@ public class MyVBO {
             texture.bind(gl);
             // associer la texture à l’unité courante (objet fourni par loadTexture)
             shaders.setTextureUnit(0); 
-            
             gl.glBindBuffer(GL2.GL_ARRAY_BUFFER,gltexturesbuffer);
             // texcoordbuffer est le buffer de la carte graphique
             //contenant les coordonnées de texture des sommets
             shaders.setTextureCoordsPointer(2, GL2.GL_FLOAT);
             // aTexCoord est l’attribut des shaders dédié aux cooordonnées de texture des sommets
+            
         } else {
             shaders.setIsTexture(false);
         }
-              
+       
+        
+        
         // Indication que ce sont les positions des sommets qui se trouvent dans ce buffer
         // Chaque sommet récupère 3 coordonnées de type float
         // Attention, cette routine est propre au shaders fournis pour le TP
@@ -230,52 +239,7 @@ public class MyVBO {
     }
     
     private void allocateTextureBuffer(){
-        textures = new float[] {
-           //sol
-            0.F,1.F,//-3.F, 0F, 3.F,//0 - p0
-            1.F,1.F,//3.F, 0.F, 3.F,//1 - p1
-            1.F,0.F,//3.F, 0.F, -3.F,//p2
-            0.F,0.F,//-3.F, 0F, -3.F,//p3
-
-            //plafond
-            0.F,1.F,//-3.F, 2.5F, 3.F,//p4
-            1.F,1.F,//3.F, 2.5F, 3.F,//p5
-            1.F,0.F,//3.F, 2.5F, -3.F,//p6
-            0.F,0.F,//-3.F, 2.5F, -3.F,//p7
-
-
-            //wall DROIT
-            1.F,1.F,//3.F, 0.F, 3.F,// 8 - P1
-            0.F,1.F,//3.F, 0.F, -3.F,// 9 - p2
-            0.F,0.F,//3.F, 2.5F, -3.F,// 10- p6
-            1.F,0.F,//3.F, 2.5F, 3.F,// 11- p5
-
-
-            //wall gauche
-            1.F,1.F,//-3.F, 0.F, 3.F,//12 - P0
-            0.F,1.F,//-3.F, 0.F, -3.F,//13- P3
-            0.F,0.F,//-3.F, 2.5F, -3.F,//14- p7
-            1.F,0.F,//-3.F, 2.5F, 3.F,// 15 - p4
-
-
-            //wall du fond
-            0.F,1.F,//-3.F, 0.F, -3.F,//16- P3
-            1.F,1.F,//3.F, 0.F, -3.F,//17 -p2
-            1.F,0.F,// 3.F, 2.5F, -3.F,//18 - p6
-            0.F,0.F,//-3.F, 2.5F, -3.F,//19- p7
-
-            //porte
-            0.417F,1.F,//-0.5F, 0.F, -3.F,//20- p8
-            0.584F,1.F,//0.5F, 0.F, -3.F,//21 - p9
-            0.584F,0.2F,//p10//0.5F, 2.F, -3.F,//22 - p10
-            0.417F, 0.2F,//p11//-0.5F, 2.F, -3.F,//23 - p11
-
-            //wall d avant
-            0.F,1.F,// -3.F, 0.F, 3.F,//24- P0
-            1.F,1.F,//3.F, 0.F, 3.F,//25- p1
-            1.F,0.F,//3.F, 2.5F, 3.F,//26 - p5
-            0.F,0.F//-3.F, 2.5F, 3.F,//27 - p4
-        };
+        
         
         ByteBuffer texturebytebuf = ByteBuffer.allocateDirect(textures.length * Float.BYTES);
         // Allocation mémoire du buffer (SIZEOF_FLOAT=4) !!
@@ -299,9 +263,6 @@ public class MyVBO {
         );
         gl.glBindBuffer(GL2.GL_ARRAY_BUFFER,0);
     }
-
-    
-    
     
     private void computeNormals() {
         normals = new float[vertexpos.length];
@@ -332,8 +293,5 @@ public class MyVBO {
         }
     }
     
-    public void setTextures(float[] textures){
-        
-    }
   
 }

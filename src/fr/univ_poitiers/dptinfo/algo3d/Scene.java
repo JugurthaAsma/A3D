@@ -123,7 +123,7 @@ public class Scene
         shaders.setNormalizing(true);
         //shaders.setIsTexture(true); // chaque objet fait ce qu'il faut
         
-        wallTexture = MyGLRenderer.loadTexture(gl, "ceiling.jpg");
+        wallTexture = MyGLRenderer.loadTexture(gl, "tiles1.jpg");
         
         room = new Room(gl, a1, b1, c1, d1, a2, b2, c2, d2, wallTexture);
         

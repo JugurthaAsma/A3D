@@ -3,6 +3,8 @@ precision mediump float;
 uniform mat4 uModelViewMatrix;
 uniform mat4 uProjectionMatrix;
 uniform mat3 uNormalMatrix;
+uniform bool uIsTexture;
+
 
 attribute vec3 aVertexPosition;
 attribute vec3 aVertexNormal;
@@ -15,7 +17,8 @@ varying vec3 vVertexNormal;
 varying vec2 vTexCoord;
 
 void main(void) {
-    vTexCoord = aTexCoord;
+    if(uIsTexture)
+        vTexCoord = aTexCoord;
     vec4 pos= uModelViewMatrix* vec4(aVertexPosition, 1.0);
     vVertexPosition = pos;
     vVertexNormal = aVertexNormal;
