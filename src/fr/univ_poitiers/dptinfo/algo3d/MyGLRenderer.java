@@ -140,8 +140,8 @@ public class MyGLRenderer implements GLEventListener
 		{
                     //shaders = new NoLightShaders(this);
                     //shaders = new GouraudShaders(this);
-                    shaders = new LambertShaders(this);
-                    //shaders = new PhongShaders(this);
+                    //shaders = new LambertShaders(this);
+                    shaders = new PhongShaders(this);
 
                 }
 		catch (Exception e)

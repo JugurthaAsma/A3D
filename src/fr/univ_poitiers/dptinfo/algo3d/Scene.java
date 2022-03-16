@@ -117,6 +117,8 @@ public class Scene
         shaders.setAmbiantLight(MyGLRenderer.darkgray);
         shaders.setLightColor(MyGLRenderer.lightgray);
         shaders.setLightSpecular(MyGLRenderer.white);
+        shaders.setMaterialSpecular(MyGLRenderer.white);
+        shaders.setMaterialShininess(100);
         
         float [] lightPos = {0f, 0f, 0f};
         shaders.setLightPosition(lightPos);
@@ -178,13 +180,13 @@ public class Scene
         MainActivity.log("Starting rendering");
         // Get OpenGL context
         GL2 gl=renderer.getGL();
-       
+        
         Matrix4 modelviewmatrix=new Matrix4();
         // Get shader to send uniform data
         /*NoLightShaders*/ LightingShaders shaders=renderer.getShaders();
         // Place viewer in the right position and orientation
         modelviewmatrix.loadIdentity();
-        
+        shaders.setViewPos(new float [] {x, y, z});
         // rotation
         modelviewmatrix.rotate(anglex , -1.0F,0.0F,0.0F);
         modelviewmatrix.rotate(angley , 0.0F,-1.0F,0.0F);        

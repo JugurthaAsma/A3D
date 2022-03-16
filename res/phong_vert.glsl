@@ -1,26 +1,23 @@
 precision mediump float;
 
-uniform bool uIsMirror;
-
 uniform mat4 uModelViewMatrix;
 uniform mat4 uProjectionMatrix;
 
-// vertex attributes
+
 attribute vec3 aVertexPosition;
 attribute vec3 aVertexNormal;
 attribute vec2 aTexCoord;
 
-
-//texture 
-varying vec2 vTexCoord;
-varying vec3 vVertexNormal;
+// for each pixel
 varying vec4 vVertexPosition;
-
+varying vec3 vVertexNormal;
+varying vec2 vTexCoord;
 
 void main(void) {
-    vTexCoord = aTexCoord;
-    vVertexNormal = aVertexNormal;
-    vVertexPosition = uModelViewMatrix * vec4(aVertexPosition, 1.0);
 
-    gl_Position= uProjectionMatrix*vVertexPosition;
+    vTexCoord = aTexCoord;
+    vVertexPosition = uModelViewMatrix * vec4(aVertexPosition, 1.0);
+    vVertexNormal = aVertexNormal;
+
+    gl_Position= uProjectionMatrix * vVertexPosition;
 }

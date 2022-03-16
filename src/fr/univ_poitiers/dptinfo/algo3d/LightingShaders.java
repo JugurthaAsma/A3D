@@ -77,6 +77,10 @@ public abstract class LightingShaders extends BasicShaders
 	 */
 	protected int aVertexNormal;
         
+        
+        protected int uViewPos;
+        
+        
         /**
          * Textures
          */
@@ -90,7 +94,7 @@ public abstract class LightingShaders extends BasicShaders
 	 */
 	public LightingShaders(final MyGLRenderer renderer)
 	{
-		super(renderer);
+            super(renderer);
 	}
 
 
@@ -123,6 +127,8 @@ public abstract class LightingShaders extends BasicShaders
             // vertex attributes
             this.aVertexNormal = gl.glGetAttribLocation(this.shaderprogram, "aVertexNormal");
             gl.glEnableVertexAttribArray(this.aVertexNormal);
+            
+            this.uViewPos = gl.glGetUniformLocation(this.shaderprogram, "uViewPos");
 
             //texture
             this.aTexCoord = gl.glGetAttribLocation(this.shaderprogram, "aTexCoord");
@@ -230,9 +236,9 @@ public abstract class LightingShaders extends BasicShaders
 	 */
 	public void setLightAttenuation(final float constant,final float linear,final float quadratic)
 	{
-		gl.glUniform1f(this.uConstantAttenuation,constant);
-		gl.glUniform1f(this.uLinearAttenuation,linear);
-		gl.glUniform1f(this.uQuadraticAttenuation,quadratic);
+            gl.glUniform1f(this.uConstantAttenuation,constant);
+            gl.glUniform1f(this.uLinearAttenuation,linear);
+            gl.glUniform1f(this.uQuadraticAttenuation,quadratic);
 	}
 
 	// ==================
@@ -245,7 +251,7 @@ public abstract class LightingShaders extends BasicShaders
 	 */
 	public void setNormalizing(final boolean state)
 	{
-		gl.glUniform1i(this.uNormalizing,state?1:0);
+            gl.glUniform1i(this.uNormalizing,state?1:0);
 	}
 
 	/**
@@ -270,9 +276,9 @@ public abstract class LightingShaders extends BasicShaders
 	 * Set the object shininess (for specular component)
 	 * @param shininess shininess of the object
 	 */
-	public void setMaterialShininess(final float shininess)
+	public void setMaterialShininess(final int shininess)
 	{
-		gl.glUniform1f(this.uMaterialShininess,shininess);
+		gl.glUniform1i(this.uMaterialShininess,shininess);
 	}
 
 	// ===================
@@ -287,6 +293,10 @@ public abstract class LightingShaders extends BasicShaders
 	{
             gl.glVertexAttribPointer(this.aVertexNormal, size, dtype, false, 0, 0);
 	}
+        
+        public void setViewPos(float [] pos) {
+            gl.glUniform4fv(this.uViewPos, 1, pos, 0);
+        }
         
         public void setTextureCoordsPointer(int size, int dtype)
 	{
