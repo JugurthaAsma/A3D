@@ -17,8 +17,7 @@ public class Ball {
     public enum SphereType {subdivision, coordinate};
     
     Matrix4 matrix;
-    private static Sphere sphereCoord = null;
-    private static Sphere sphereSub = null;
+    private Sphere sphere;
     float[] color;
     float x,z,radius;
     SphereType type;
@@ -29,17 +28,12 @@ public class Ball {
         this.radius = radius;
         this.type = type;
         this.color = color;
-        short nbRondelles = 40;
-        short nbQuartiers = 40;
         
-        switch (type) {
-            case coordinate : if (sphereCoord == null) sphereCoord = new Sphere(gl, nbRondelles, nbQuartiers) ; break;
-            case subdivision : if (sphereSub == null) sphereSub = new Sphere(gl, 4) ; break;
-        }
+        sphere = (type == SphereType.coordinate) ? Sphere.getSphereCoordInstance(gl) : Sphere.getSphereSubInstance(gl) ;
         
     }
 
-    public void draw(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, Scene scene, float step, Matrix4 modelMatrix, float rebound) {
+    public void draw(final GL2 gl,final LightingShaders shaders, Scene scene, float step, Matrix4 modelMatrix, float rebound) {
         
         matrix = new Matrix4();
         matrix.loadIdentity();
@@ -66,10 +60,7 @@ public class Ball {
             shaders.setModelViewMatrix(matrix.getMatrix());
         }
         
-        switch (type) {
-            case coordinate : sphereCoord.draw(gl, shaders, color, MyGLRenderer.black); break;
-            case subdivision : sphereSub.draw(gl, shaders, color, MyGLRenderer.black); break;
-        }
+        sphere.draw(gl, shaders, color, MyGLRenderer.black); 
     }
    
     public void draw(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, Scene scene, float step, Matrix4 modelMatrix) {

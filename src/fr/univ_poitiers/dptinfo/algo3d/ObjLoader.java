@@ -29,6 +29,7 @@ public class ObjLoader{
     
     protected float[] vertexpos;
     protected int[] triangles;
+    protected float[] normals;
     
     float x, y, z, scale;
         
@@ -41,6 +42,7 @@ public class ObjLoader{
         
         ArrayList<Float> vertexposArList = new ArrayList<>();
         ArrayList<Integer> trianglesArList = new ArrayList<>();
+        ArrayList<Float> normalsArList = new ArrayList<>();
         
         try{
             // Le fichier d'entrée
@@ -88,6 +90,10 @@ public class ObjLoader{
                             trianglesArList.add(Integer.parseInt(dataLine[3])-1);
                         }
                     }
+                } else if(line.startsWith("vn ")) {
+                    normalsArList.add(Float.parseFloat(dataLine[1]));
+                    normalsArList.add(Float.parseFloat(dataLine[2]));
+                    normalsArList.add(Float.parseFloat(dataLine[3]));
                 }
             }
         
@@ -100,17 +106,22 @@ public class ObjLoader{
             for (int i = 0; i < triangles.length; i++) {
                triangles[i] = trianglesArList.get(i);
             }
+            
+            normals = new float[normalsArList.size()];
+            System.out.println("+++++++++++++++++++++++++ " + normals.length);
+            for (int i = 0; i < normals.length; i++) {
+               normals[i] = vertexposArList.get(i);
+            }
+            
         }catch(IOException e){
             e.printStackTrace();
         }      
         
-        shape = new MyVBO(gl, vertexpos, triangles);
+        shape = new MyVBO(gl, vertexpos, triangles, normals);
       
     }
     
-
-    
-    public void draw(final GL2 gl, final /*NoLightShaders*/ LightingShaders shaders, Matrix4 modelMatrix, float rotationAngle, float[] color, Scene scene){
+    public void draw(final GL2 gl, final LightingShaders shaders, Matrix4 modelMatrix, float rotationAngle, float[] color, Scene scene){
         Matrix4 matrix = new Matrix4();
         matrix.loadIdentity();
         matrix.multMatrix(modelMatrix);
@@ -121,7 +132,7 @@ public class ObjLoader{
         shape.draw(gl, shaders, color, MyGLRenderer.black);
     }
     
-    public void draw(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders,float[] color,boolean drawTriangle){
+    public void draw(final GL2 gl,final LightingShaders shaders,float[] color,boolean drawTriangle){
         shape.draw(gl, shaders, color);
     }
 }

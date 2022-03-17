@@ -15,6 +15,9 @@ import java.util.HashMap;
  * @author JUGURTHA
  */
 public class Sphere  {
+    
+    private static Sphere coordInstance = null;
+    private static Sphere subInstance = null;
  
     MyVBO faces;
     float[] vertexpos;
@@ -26,7 +29,26 @@ public class Sphere  {
     private short offset;
     private int trianglesnum;
     HashMap<MyPairMiddle, Short> myPairMiddleHashMap;
+    
+    final static short DEFAULT_NB_RONDELLES = 40;
+    final static short DEFAULT_NB_QUARTIERS = 40;
 
+    
+    public static Sphere getSphereCoordInstance(final GL2 gl) {
+        if (coordInstance == null) {
+            coordInstance = new Sphere(gl, DEFAULT_NB_RONDELLES, DEFAULT_NB_QUARTIERS);
+        }
+        
+        return coordInstance;
+    }
+    
+    public static Sphere getSphereSubInstance(final GL2 gl) {
+        if (subInstance == null) {
+            subInstance = new Sphere(gl, 6);
+        }
+        
+        return subInstance;
+    }
 
     public Sphere(final GL2 gl, short nbRondelles, short nbQuartiers ){
         
@@ -36,11 +58,9 @@ public class Sphere  {
         setTriangles(nbQuartiers, nbRondelles);
         
         faces = new MyVBO(gl, vertexpos, triangles);
-        
     }
     
     private float[] setVertexpos(short nbQuartiers, short nbRondelles) {
-
         int size = nbQuartiers * nbRondelles * 3 * 2;
         vertexpos = new float[size];       
                 
@@ -49,7 +69,6 @@ public class Sphere  {
         float thetaStep = (float) (Math.PI / nbRondelles);
         
         for (int i = -nbQuartiers; i < nbQuartiers; i++) {
-            
             theta = (float) (-Math.PI / 2 + i * thetaStep);
 
             for (int j = 0; j < nbRondelles; ++j) {
@@ -57,10 +76,8 @@ public class Sphere  {
                 vertexpos[offset++] = (float) (Math.cos(theta) * Math.cos(phi));
                 vertexpos[offset++] = (float) (Math.sin(theta));
                 vertexpos[offset++] = (float) (Math.cos(theta) * Math.sin(phi));
-                
             }
         } 
-        
         return vertexpos;
     }
 
@@ -75,7 +92,6 @@ public class Sphere  {
         
         for (int i = 0; i <= nbRondelles; ++i)
             for (int j = 0; j <= nbQuartiers; ++j) {
-
                 // First triangle
                 triangles[pos++] = posX++;
                 triangles[pos++]= posX;
@@ -90,14 +106,13 @@ public class Sphere  {
         return triangles;
     }
 
-    void draw(GL2 gl, /*NoLightShaders*/ LightingShaders shaders, float[] cyan, float[] black) {
-        
+    void draw(GL2 gl, LightingShaders shaders, float[] cyan, float[] black) {
         faces.draw(gl, shaders, cyan, black);
     }
     
     
-    /******************************* subdivision ********************************/
     
+    /******************************* subdivision ********************************/
     public Sphere(final GL2 gl, int sub) {
         
         myPairMiddleHashMap = new HashMap<>();
@@ -132,7 +147,7 @@ public class Sphere  {
         else
             triangles = firstTriangles;
 
-        faces = new MyVBO(gl, vertexpos, triangles);
+        faces = new MyVBO(gl, vertexpos, triangles, vertexpos, null, null);
     }
 
     private void subDiv(int sub, short a, short b, short c) {
@@ -162,6 +177,5 @@ public class Sphere  {
         myPairMiddleHashMap.put(middlekey, offset);
         return offset++;
     }
-    
     
 }

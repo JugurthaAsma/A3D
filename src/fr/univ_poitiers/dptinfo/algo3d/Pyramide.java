@@ -73,6 +73,6 @@ public class Pyramide {
         
         shaders.setModelViewMatrix(matrix.getMatrix());
         //shaders.setColor(color);
-        faces.draw(gl, shaders, GL2.GL_TRIANGLES, color, MyGLRenderer.black);
+        faces.draw(gl, shaders, GL2.GL_TRIANGLES, color, MyGLRenderer.black, null);
     }
 }

@@ -38,6 +38,11 @@ public class Room {
     MyVBO wallsVbo;
     MyVBO bordersVbo;
     
+    private final Texture wallTexture;
+    private final Texture ceillingTexture;
+    private final Texture floorTexture;
+   
+    
     
     // door
     // left quad
@@ -50,7 +55,7 @@ public class Room {
     Vec3f r2 = new Vec3f(0.5f, 1.5f, -Scene.wallsize /*-3f*/);
     Vec3f r3 = new Vec3f(0.5f, Scene.wallheight, -Scene.wallsize /*-3f*/);
     
-    public Room(final GL2 gl, final Vec3f a1, final Vec3f b1, final Vec3f c1, final Vec3f d1, final Vec3f a2, final Vec3f b2, final Vec3f c2, final Vec3f d2, Texture texture){
+    public Room(final GL2 gl, final Vec3f a1, final Vec3f b1, final Vec3f c1, final Vec3f d1, final Vec3f a2, final Vec3f b2, final Vec3f c2, final Vec3f d2){
         vertexpos = new float[]{
             // frontWall
             
@@ -221,31 +226,26 @@ public class Room {
             0, 1,
             
             // upper
-            0.5F, 0,
+            0.4F, 0,
             0, 0,
-            0, 0.5F,
-            0.5F, 0.5F,
-            /*
-            0.417F,1.F,//-0.5F, 0.F, -3.F,//20- p8
-            0.584F,1.F,//0.5F, 0.F, -3.F,//21 - p9
-            0.584F,0.2F,//p10//0.5F, 2.F, -3.F,//22 - p10
-            0.417F, 0.2F,//p11//-0.5F, 2.F, -3.F,//23 - p11
-            
-            */
+            0, 0.4F,
+            0.4F, 0.4F,
         };
         
         
-        
-        floorVbo = new MyVBO(gl, vertexpos, floorTriangles, texture, textures);
-        ceillingVbo = new MyVBO(gl, vertexpos, ceillingTriangles, texture, textures);
-        wallsVbo = new MyVBO(gl, vertexpos, wallsTsriangles, texture, textures);
-        
+        wallTexture = MyGLRenderer.loadTexture(gl, "wall.jpg");
+        ceillingTexture = MyGLRenderer.loadTexture(gl, "tiles1.jpg");
+        floorTexture = MyGLRenderer.loadTexture(gl, "marble1.jpg");
+
+        wallsVbo = new MyVBO(gl, vertexpos, wallsTsriangles, wallTexture, textures);
+        ceillingVbo = new MyVBO(gl, vertexpos, ceillingTriangles, ceillingTexture, textures);
+        floorVbo = new MyVBO(gl, vertexpos, floorTriangles, floorTexture, textures);
         //bordersVbo = new MyVBO(gl, vertexpos, bordersLines);
         
 
     }
     
-    public void draw(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, final float[] colorCeilling, final float[] colorFloor, final float[] colorWalls, final float[] linesColor){  
+    public void draw(final GL2 gl,final LightingShaders shaders, final float[] colorCeilling, final float[] colorFloor, final float[] colorWalls, final float[] linesColor){  
         
         //drawBorders(gl, shaders, MyGLRenderer.black);
         drawCeilling(gl, shaders, colorCeilling, linesColor);
@@ -262,22 +262,22 @@ public class Room {
     public void drawCeilling(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, final float[] color, final float[] linesColor) {
         
         //shaders.setColor(color);
-        ceillingVbo.draw(gl, shaders, GL2.GL_TRIANGLES, color, linesColor);
+        ceillingVbo.draw(gl, shaders, GL2.GL_TRIANGLES, color, linesColor, null);
     }
     
     public void drawFloor(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, final float[] color, final float[] linesColor) {
         //shaders.setColor(color);
-        floorVbo.draw(gl, shaders, GL2.GL_TRIANGLES, color, linesColor);
+        floorVbo.draw(gl, shaders, GL2.GL_TRIANGLES, color, linesColor, null);
     }
     
     public void drawWalls(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, final float[] color, final float[] linesColor) {
         //shaders.setColor(color);
-        wallsVbo.draw(gl, shaders, GL2.GL_TRIANGLES, color, linesColor);
+        wallsVbo.draw(gl, shaders, GL2.GL_TRIANGLES, color, linesColor, null);
     }
 
     public void drawBorders(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, final float[] color) {
         //gl.glLineWidth(3);
         //shaders.setColor(color);
-        bordersVbo.draw(gl, shaders, GL2.GL_LINES, color, null);
+        bordersVbo.draw(gl, shaders, GL2.GL_LINES, color, null, null);
     }
 }

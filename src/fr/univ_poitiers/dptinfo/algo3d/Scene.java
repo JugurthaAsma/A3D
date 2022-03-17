@@ -68,8 +68,6 @@ public class Scene
     float rebound = 0;
     float orientation = 0.05f;
     
-    private Texture wallTexture;
-    
     boolean interupteur = true;
     
 
@@ -118,25 +116,23 @@ public class Scene
         shaders.setLightColor(MyGLRenderer.lightgray);
         shaders.setLightSpecular(MyGLRenderer.white);
         shaders.setMaterialSpecular(MyGLRenderer.white);
-        shaders.setMaterialShininess(100);
+        shaders.setMaterialShininess(1000);
         
         float [] lightPos = {0f, 0f, 0f};
         shaders.setLightPosition(lightPos);
         shaders.setNormalizing(true);
         //shaders.setIsTexture(true); // chaque objet fait ce qu'il faut
+
+        room = new Room(gl, a1, b1, c1, d1, a2, b2, c2, d2);
         
-        wallTexture = MyGLRenderer.loadTexture(gl, "tiles1.jpg");
-        
-        room = new Room(gl, a1, b1, c1, d1, a2, b2, c2, d2, wallTexture);
-        
-        sphereSub = new Sphere(gl,5);
-        sun = new Ball(gl, 0f, 0f, 1f, MyGLRenderer.yellow, SphereType.subdivision);
-        earth = new Ball(gl, 3f, 0f, 0.3f, MyGLRenderer.cyan, SphereType.coordinate);
-        mars = new Ball(gl, -2f, 0f, 0.2f, new float[]  {(156F / 255), (46F / 255), (53F / 255), 1F}, SphereType.subdivision);
+        sphereSub = new Sphere(gl,7);
+        sun = new Ball(gl, 0f, 0f, 1f, MyGLRenderer.yellow, SphereType.coordinate);
+        earth = new Ball(gl, 3f, 0f, 0.3f, MyGLRenderer.cyan, SphereType.subdivision);
+        mars = new Ball(gl, -2f, 0f, 0.2f, new float[]  {(156F / 255), (46F / 255), (53F / 255), 1F}, SphereType.coordinate);
         ball = new Ball(gl, 0f, 4f, 0.5f, MyGLRenderer.green, SphereType.subdivision);
         armaBall = new Ball(gl, wallsize / 2, 0, 0.5f, MyGLRenderer.orange, SphereType.coordinate);
         pyramide = new Pyramide(gl, 1, 1, 1);
-        armadillo1 = new ObjLoader(gl, "armadillo.obj", 0.8f, wallsize / 2, 0.8f, wallsize / 2);
+        //armadillo1 = new ObjLoader(gl, "armadillo.obj", 0.8f, wallsize / 2, 0.8f, wallsize / 2);
         
         gl.glDepthFunc(GL2.GL_LESS);
         gl.glEnable(GL2.GL_DEPTH_TEST);

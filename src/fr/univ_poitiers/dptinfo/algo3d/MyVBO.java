@@ -35,7 +35,19 @@ public class MyVBO {
 
 
     
-    public MyVBO(final GL2 gl, float[] vertexpos, short[] shortTriangles, Texture texture, float[] textures) {
+    public MyVBO(
+        final GL2 gl,
+        float[] vertexpos,
+        short[] shortTriangles,
+        float[] normals,
+        Texture texture,
+        float[] textures
+    ) {
+        
+        if (normals != null) {
+            this.normals = normals;
+        }
+        
         if (textures != null) {
             this.textures = textures;
         }
@@ -55,6 +67,10 @@ public class MyVBO {
         allocateTextureBuffer();
     }
     
+    public MyVBO(final GL2 gl, float[] vertexpos, short[] shortTriangles, Texture texture, float[] textures) {
+        this(gl, vertexpos, shortTriangles, null, texture, textures);
+    }
+    
     public MyVBO(final GL2 gl, float[] vertexpos, short[] shortTriangles, Texture texture) {
         this(gl, vertexpos, shortTriangles, texture, null);
     }
@@ -64,7 +80,7 @@ public class MyVBO {
     }
     
     // pour les .obj
-    public MyVBO(final GL2 gl, float[] vertexpos, int[] intTriangles) {
+    public MyVBO(final GL2 gl, float[] vertexpos, int[] intTriangles, float[] normals) {
         this.gl = gl;
         this.vertexpos = vertexpos;
         
@@ -78,7 +94,10 @@ public class MyVBO {
         allocateTriangleBuffer();
     }
     
-    public void draw(final GL2 gl, final /*NoLightShaders*/ LightingShaders shaders, /*int numberElements,*/ int elementType, float[] objectColor, float[] linesColor) {
+    
+    
+    
+    public void draw(final GL2 gl, final LightingShaders shaders, int elementType, float[] objectColor, float[] linesColor, Texture _texture) {
         shaders.setMaterialColor(objectColor);
         gl.glBindBuffer(GL2.GL_ARRAY_BUFFER,glposbuffer);
         // Activation du buffer de position
@@ -113,13 +132,13 @@ public class MyVBO {
         // Attention, cette routine est propre au shaders fournis pour le TP
         gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, glelementbuffer);
         // Activation du buffer d’element (créé par vos soins)
-        
+        /*
         if (linesColor != null) {
             //shaders.setColor(linesColor);
             for(int i=0;i<nbIndices;i+=3) // i.e. pour chaque triangle commençant à l’indice i
                gl.glDrawElements(GL2.GL_LINE_LOOP,3, shaderType, i * shaderSize);
         }
-        
+        */
         //shaders.setColor(objectColor);
         shaders.setLightColor(MyGLRenderer.lightgray);
         gl.glDrawElements(elementType, nbIndices, shaderType, 0);
@@ -130,12 +149,14 @@ public class MyVBO {
         // Désactivations nécessaires pour éviter de perturber les tracés suivants
     }
     
-    public void draw(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, float[] objectColor, float[] linesColor){
-        this.draw(gl, shaders, GL2.GL_TRIANGLES, objectColor, linesColor);
+
+    
+    public void draw(final GL2 gl,final LightingShaders shaders, float[] objectColor, float[] linesColor){
+        this.draw(gl, shaders, GL2.GL_TRIANGLES, objectColor, linesColor, null);
     }
     
-    public void draw(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, float[] objectColor){
-        this.draw(gl, shaders, GL2.GL_TRIANGLES, objectColor, null);
+    public void draw(final GL2 gl,final LightingShaders shaders, float[] objectColor){
+        this.draw(gl, shaders, GL2.GL_TRIANGLES, objectColor, null, null);
     }
     
     private void allocateVertexPosBuffer(){
@@ -293,5 +314,4 @@ public class MyVBO {
         }
     }
     
-  
 }

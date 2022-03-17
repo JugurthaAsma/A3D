@@ -17,7 +17,6 @@ public class MyPairMiddle  {
         
         this.v1 = v1 < v2 ? v1 : v2;
         this.v2 = v1 < v2 ? v2 : v1;
-                
     }
 
     public void setMiddle(float[] vertexpos, int offset) {
