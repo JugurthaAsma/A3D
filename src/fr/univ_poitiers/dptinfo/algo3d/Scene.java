@@ -34,8 +34,8 @@ public class Scene
     Quad ceiling;
     
     Room room;
-    Sphere sphere, sphereSub;
-    Ball sun, earth, mars, ball, armaBall;
+    Sphere sphere, sun;
+    Ball earth, mars, ball, armaBall;
     
     Pyramide pyramide;
     
@@ -54,7 +54,7 @@ public class Scene
      */
     float anglex,angley, step;
     float x = 0;
-    float y = -0.5f;
+    float y = -1f;
     float z = 0;
     float stp = 0f;
     
@@ -125,14 +125,13 @@ public class Scene
 
         room = new Room(gl, a1, b1, c1, d1, a2, b2, c2, d2);
         
-        sphereSub = new Sphere(gl,7);
-        sun = new Ball(gl, 0f, 0f, 1f, MyGLRenderer.yellow, SphereType.coordinate);
+        sun = new Sphere(gl,7);
         earth = new Ball(gl, 3f, 0f, 0.3f, MyGLRenderer.cyan, SphereType.subdivision);
-        mars = new Ball(gl, -2f, 0f, 0.2f, new float[]  {(156F / 255), (46F / 255), (53F / 255), 1F}, SphereType.coordinate);
-        ball = new Ball(gl, 0f, 4f, 0.5f, MyGLRenderer.green, SphereType.subdivision);
-        armaBall = new Ball(gl, wallsize / 2, 0, 0.5f, MyGLRenderer.orange, SphereType.coordinate);
+        mars = new Ball(gl, -2f, 0f, 0.2f, MyGLRenderer.red, SphereType.coordinate);
+        ball = new Ball(gl, 0f, 4f, 0.5f, MyGLRenderer.magenta, SphereType.subdivision);
+        armaBall = new Ball(gl, wallsize / 2, 0, 0.5f, MyGLRenderer.white, SphereType.coordinate);
         pyramide = new Pyramide(gl, 1, 1, 1);
-        //armadillo1 = new ObjLoader(gl, "armadillo.obj", 0.8f, wallsize / 2, 0.8f, wallsize / 2);
+        armadillo1 = new ObjLoader(gl, "armadillo.obj", 0.8f, wallsize / 2, 0.8f, wallsize / 2);
         
         gl.glDepthFunc(GL2.GL_LESS);
         gl.glEnable(GL2.GL_DEPTH_TEST);
@@ -216,7 +215,7 @@ public class Scene
         modelviewmatrixSphere.translate(0,1,-wallsize*2);//translation par rapport à la vue
         modelviewmatrixSphere.rotate(step, 0, 1, 0);
         shaders.setModelViewMatrix(modelviewmatrixSphere.getMatrix());
-        sphereSub.draw(gl, shaders, MyGLRenderer.yellow, MyGLRenderer.black);
+        sun.draw(gl, shaders, MyGLRenderer.yellow, MyGLRenderer.black);
         
         
         //************** BALLS  *******************
@@ -230,17 +229,17 @@ public class Scene
         
         pyramide.draw(gl, shaders, this, step, MyGLRenderer.yellow);
         
-        //armadillo1.draw(gl, shaders, modelviewmatrix, 0F, MyGLRenderer.white, this);
+        armadillo1.draw(gl, shaders, modelviewmatrix, 0F, MyGLRenderer.white, this);
         
         
-        /*
+        
         Matrix4 modelviewmatrixSphereArmadillo = new Matrix4();
         modelviewmatrixSphereArmadillo.loadIdentity();
         modelviewmatrixSphereArmadillo.multMatrix(modelviewmatrix);
         modelviewmatrixSphereArmadillo.translate(0,0,-6);//translation par rapport à la vue
         shaders.setModelViewMatrix(modelviewmatrixSphereArmadillo.getMatrix());
         armadillo1.draw(gl, shaders, modelviewmatrixSphereArmadillo, (float) Math.PI, MyGLRenderer.red, this);
-        */
+        
         MainActivity.log("Rendering terminated.");
     }    
     

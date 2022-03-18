@@ -49,54 +49,26 @@ public class ObjLoader{
             BufferedReader br = new BufferedReader(new InputStreamReader(ObjLoader.class.getResourceAsStream("./objs/" + objName))); 
 
             String line;
-            while((line = br.readLine()) != null)
-            {
+            while((line = br.readLine()) != null) {
                 String[] dataLine = line.split(" "); 
                 if(line.startsWith("v ")){
-                    if(line.startsWith("v  ")){
-                        vertexposArList.add(Float.parseFloat(dataLine[2]));
-                        vertexposArList.add(Float.parseFloat(dataLine[3]));
-                        vertexposArList.add(Float.parseFloat(dataLine[4]));
-                    }else{
-                        vertexposArList.add(Float.parseFloat(dataLine[1]));
-                        vertexposArList.add(Float.parseFloat(dataLine[2]));
-                        vertexposArList.add(Float.parseFloat(dataLine[3]));
-                    }
+                    vertexposArList.add(Float.parseFloat(dataLine[1]));
+                    vertexposArList.add(Float.parseFloat(dataLine[2]));
+                    vertexposArList.add(Float.parseFloat(dataLine[3]));
                 }else if(line.startsWith("f ")){
-                    if(line.startsWith("f  ")){
-                        if(line.contains("/")){
-                            String[] sommet1 = dataLine[2].split("/");
-                            String[] sommet2 = dataLine[3].split("/");
-                            String[] sommet3 = dataLine[4].split("/");
-                            trianglesArList.add(Integer.parseInt(sommet1[0])-1);
-                            trianglesArList.add(Integer.parseInt(sommet2[0])-1);
-                            trianglesArList.add(Integer.parseInt(sommet3[0])-1);
-                        }else{
-                            trianglesArList.add(Integer.parseInt(dataLine[2])-1);
-                            trianglesArList.add(Integer.parseInt(dataLine[3])-1);
-                            trianglesArList.add(Integer.parseInt(dataLine[4])-1);
-                        }
-                    }else{
-                        if(line.contains("/")){
-                            String[] sommet1 = dataLine[1].split("/");
-                            String[] sommet2 = dataLine[2].split("/");
-                            String[] sommet3 = dataLine[3].split("/");
-                            trianglesArList.add(Integer.parseInt(sommet1[0])-1);
-                            trianglesArList.add(Integer.parseInt(sommet2[0])-1);
-                            trianglesArList.add(Integer.parseInt(sommet3[0])-1);
-                        }else{
-                            trianglesArList.add(Integer.parseInt(dataLine[1])-1);
-                            trianglesArList.add(Integer.parseInt(dataLine[2])-1);
-                            trianglesArList.add(Integer.parseInt(dataLine[3])-1);
-                        }
-                    }
+                    String[] sommet1 = dataLine[1].split("/");
+                    String[] sommet2 = dataLine[2].split("/");
+                    String[] sommet3 = dataLine[3].split("/");
+                    trianglesArList.add(Integer.parseInt(sommet1[0])-1);
+                    trianglesArList.add(Integer.parseInt(sommet2[0])-1);
+                    trianglesArList.add(Integer.parseInt(sommet3[0])-1);
                 } else if(line.startsWith("vn ")) {
                     normalsArList.add(Float.parseFloat(dataLine[1]));
                     normalsArList.add(Float.parseFloat(dataLine[2]));
                     normalsArList.add(Float.parseFloat(dataLine[3]));
                 }
             }
-        
+            
             vertexpos = new float[vertexposArList.size()];
             for (int i = 0; i < vertexpos.length; i++) {
                vertexpos[i] = vertexposArList.get(i);
@@ -108,9 +80,8 @@ public class ObjLoader{
             }
             
             normals = new float[normalsArList.size()];
-            System.out.println("+++++++++++++++++++++++++ " + normals.length);
             for (int i = 0; i < normals.length; i++) {
-               normals[i] = vertexposArList.get(i);
+               normals[i] = normalsArList.get(i);
             }
             
         }catch(IOException e){
@@ -129,7 +100,7 @@ public class ObjLoader{
         matrix.scale(this.scale, this.scale, this.scale);
         matrix.rotate(rotationAngle, 0f, 1f, 0f);
         shaders.setModelViewMatrix(matrix.getMatrix());
-        shape.draw(gl, shaders, color, MyGLRenderer.black);
+        shape.draw(gl, shaders, color, MyGLRenderer.black, null);
     }
     
     public void draw(final GL2 gl,final LightingShaders shaders,float[] color,boolean drawTriangle){

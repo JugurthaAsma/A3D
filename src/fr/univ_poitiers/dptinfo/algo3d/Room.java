@@ -237,9 +237,9 @@ public class Room {
         ceillingTexture = MyGLRenderer.loadTexture(gl, "tiles1.jpg");
         floorTexture = MyGLRenderer.loadTexture(gl, "marble1.jpg");
 
-        wallsVbo = new MyVBO(gl, vertexpos, wallsTsriangles, wallTexture, textures);
-        ceillingVbo = new MyVBO(gl, vertexpos, ceillingTriangles, ceillingTexture, textures);
-        floorVbo = new MyVBO(gl, vertexpos, floorTriangles, floorTexture, textures);
+        wallsVbo = new MyVBO(gl, vertexpos, wallsTsriangles, textures);
+        ceillingVbo = new MyVBO(gl, vertexpos, ceillingTriangles, textures);
+        floorVbo = new MyVBO(gl, vertexpos, floorTriangles, textures);
         //bordersVbo = new MyVBO(gl, vertexpos, bordersLines);
         
 
@@ -262,17 +262,17 @@ public class Room {
     public void drawCeilling(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, final float[] color, final float[] linesColor) {
         
         //shaders.setColor(color);
-        ceillingVbo.draw(gl, shaders, GL2.GL_TRIANGLES, color, linesColor, null);
+        ceillingVbo.draw(gl, shaders, GL2.GL_TRIANGLES, color, linesColor, ceillingTexture);
     }
     
     public void drawFloor(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, final float[] color, final float[] linesColor) {
         //shaders.setColor(color);
-        floorVbo.draw(gl, shaders, GL2.GL_TRIANGLES, color, linesColor, null);
+        floorVbo.draw(gl, shaders, GL2.GL_TRIANGLES, color, linesColor, floorTexture);
     }
     
     public void drawWalls(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, final float[] color, final float[] linesColor) {
         //shaders.setColor(color);
-        wallsVbo.draw(gl, shaders, GL2.GL_TRIANGLES, color, linesColor, null);
+        wallsVbo.draw(gl, shaders, GL2.GL_TRIANGLES, color, linesColor, wallTexture);
     }
 
     public void drawBorders(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, final float[] color) {

@@ -6,6 +6,7 @@
 package fr.univ_poitiers.dptinfo.algo3d;
 
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.util.texture.Texture;
 import java.util.HashMap;
 
 
@@ -22,6 +23,7 @@ public class Sphere  {
     MyVBO faces;
     float[] vertexpos;
     short[] triangles;
+    float[] textures;
     float radius;
     int nbRondelles;
     int nbQuartiers;
@@ -29,6 +31,7 @@ public class Sphere  {
     private short offset;
     private int trianglesnum;
     HashMap<MyPairMiddle, Short> myPairMiddleHashMap;
+    Texture shpereTexture;
     
     final static short DEFAULT_NB_RONDELLES = 40;
     final static short DEFAULT_NB_QUARTIERS = 40;
@@ -56,8 +59,9 @@ public class Sphere  {
         this.nbQuartiers = nbQuartiers;
         setVertexpos(nbQuartiers, nbRondelles);
         setTriangles(nbQuartiers, nbRondelles);
-        
-        faces = new MyVBO(gl, vertexpos, triangles);
+        setTextures();
+        shpereTexture = MyGLRenderer.loadTexture(gl, "basketball.jpg");
+        faces = new MyVBO(gl, vertexpos, triangles, textures);
     }
     
     private float[] setVertexpos(short nbQuartiers, short nbRondelles) {
@@ -105,16 +109,26 @@ public class Sphere  {
 
         return triangles;
     }
+    
+    private void setTextures() {
+        textures = new float[(int) (2*(vertexpos.length/3))];
+        int textCursor = 0;
+        for (int i = 0; i < vertexpos.length; i+= 3) {
+            textures[textCursor] = Math.abs(vertexpos[i+2]+1)/2;
+            textures[textCursor+1] = Math.abs(vertexpos[i+1]+1)/2;
+            textCursor += 2;
+        }
+    }
 
     void draw(GL2 gl, LightingShaders shaders, float[] cyan, float[] black) {
-        faces.draw(gl, shaders, cyan, black);
+        faces.draw(gl, shaders, cyan, black, shpereTexture);
     }
     
     
     
     /******************************* subdivision ********************************/
     public Sphere(final GL2 gl, int sub) {
-        
+        shpereTexture = MyGLRenderer.loadTexture(gl, "beachball.jpg");
         myPairMiddleHashMap = new HashMap<>();
         offset = 6;
         trianglesnum = 0;
@@ -146,8 +160,10 @@ public class Sphere  {
                 subDiv(sub, firstTriangles[i], firstTriangles[++i], firstTriangles[++i]);
         else
             triangles = firstTriangles;
+        
+        setTextures();
 
-        faces = new MyVBO(gl, vertexpos, triangles, vertexpos, null, null);
+        faces = new MyVBO(gl, vertexpos, triangles, vertexpos, textures);
     }
 
     private void subDiv(int sub, short a, short b, short c) {
@@ -177,5 +193,7 @@ public class Sphere  {
         myPairMiddleHashMap.put(middlekey, offset);
         return offset++;
     }
+    
+    
     
 }
