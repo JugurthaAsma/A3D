@@ -40,7 +40,12 @@ public class Ball {
         
         if (modelMatrix != null) { 
             matrix.multMatrix(modelMatrix);
-            matrix.translate(x, radius, z); //translation par rapport à la vue
+            if (rebound != 0) {
+                matrix.translate(x + scene.objX, radius + 2f + scene.objY - Math.abs(rebound / 3), + z + rebound + scene.objZ);//translation par rapport à la vue
+            } else {
+                matrix.translate(x, radius, z); //translation par rapport à la vue
+            }
+            //matrix.translate(x, radius, z); //translation par rapport à la vue
             matrix.rotate(step * 10, 0.0F, -0.9F, 0.0F); // rotation sur soit meme
             matrix.scale(radius,radius,radius);
             

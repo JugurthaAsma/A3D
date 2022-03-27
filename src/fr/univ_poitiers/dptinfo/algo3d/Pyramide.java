@@ -26,17 +26,40 @@ public class Pyramide {
         this.width= width; 
         this.height = height;
         
-        
         vertexpos = new float[]{
             
             // base
-            -width/2, 0, lenght/2,
-            width/2, 0, lenght/2,
-            width/2, 0, -lenght/2,
-            -width/2, 0, -lenght/2,
+            -width/2, 0, lenght/2,  // a
+            width/2, 0, lenght/2,   // b
+            width/2, 0, -lenght/2,  // c
+            -width/2, 0, -lenght/2, // d
             
             // sommet
-            0, height, 0,
+            0, height, 0,           // s
+            
+            // face 1 
+            0, height, 0,           // s
+            width/2, 0, lenght/2,   // b
+            -width/2, 0, lenght/2,  // a
+            
+            
+            // face 2
+            0, height, 0,           // s
+            width/2, 0, -lenght/2,  // c
+            width/2, 0, lenght/2,   // b
+
+            
+            // face 3
+            0, height, 0,           // s
+            -width/2, 0, -lenght/2, // d
+            width/2, 0, -lenght/2,  // c
+            
+            // face 4
+            0, height, 0,           // s
+            -width/2, 0, lenght/2,  // a
+            -width/2, 0, -lenght/2, // d
+            
+            
         };
         
         
@@ -45,25 +68,27 @@ public class Pyramide {
             //base
             0, 1, 2,
             0, 2, 3,
-            
-            // faces
-            0, 1, 4,
-            3, 0, 4,
-            2, 3, 4,
-            1, 2, 4
+              
+//            // faces
+//            5, 6, 7,
+//            8, 9, 10,
+//            11, 12, 13,
+//            14, 15, 16,
+//            
+            7, 6, 5,
+            10, 9, 8,
+            13, 12, 11,
+            16, 15, 14,
         };
             
         faces = new MyVBO(gl, vertexpos, triangles);
     }
     
-    public void draw(final GL2 gl,final LightingShaders shaders, Scene scene, float step, final float[] color) {
+    public void draw(final GL2 gl,final LightingShaders shaders, Matrix4 medelViewMatrix, float step, final float[] color) {
         
         Matrix4 matrix = new Matrix4();
-        
-         // fixer sur un point (par rapport a la vue)
-        matrix.rotate(scene.anglex, -0.1F, 0.F, 0.0F);
-        matrix.rotate(scene.angley, 0.0F, -0.1F, 0.0F);
-        matrix.translate(scene.x - 2 ,scene.y , scene.z);
+        matrix.multMatrix(medelViewMatrix);
+        matrix.translate( - 2 ,0 , 0);
         
         // rotation sur soit meme
         matrix.rotate(step * 5, 0.0F, -0.1F, 0.0F); 

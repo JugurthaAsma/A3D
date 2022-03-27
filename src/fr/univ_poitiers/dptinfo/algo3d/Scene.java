@@ -144,7 +144,7 @@ public class Scene
         // Set the background frame color
         gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         // Allow back face culling !!
-        //gl.glEnable(GL2.GL_CULL_FACE);
+        gl.glEnable(GL2.GL_CULL_FACE);
         MainActivity.log("Graphics initialized");
 }
 
@@ -171,14 +171,25 @@ public class Scene
      */
     public void draw(MyGLRenderer renderer)
     {
+        
+
         MainActivity.log("Starting rendering");
         // Get OpenGL context
         GL2 gl=renderer.getGL();
+        
+        
         
         Matrix4 modelviewmatrix=new Matrix4();
         // Get shader to send uniform data
         LightingShaders shaders=renderer.getShaders();
         shaders.setLighting(interupteur);
+        
+        // draw the reflected objects
+        gl.glFrontFace(GL2.GL_CW);
+        drawReflected(gl, shaders, modelviewmatrix);
+        gl.glFrontFace(GL2.GL_CCW);
+        
+        
         // Place viewer in the right position and orientation
         modelviewmatrix.loadIdentity();
         shaders.setViewPos(new float [] {x, y, z});
@@ -189,7 +200,7 @@ public class Scene
         modelviewmatrix.translate(x,y,z);  
         
         
-        makeReflextion(modelviewmatrix);
+        makeReflextion(modelviewmatrix, false);
 
         // application
         shaders.setModelViewMatrix(modelviewmatrix.getMatrix());
@@ -225,10 +236,10 @@ public class Scene
         //************** BALLS  *******************
         earth.draw(gl, shaders, this, step , modelviewmatrixSphere );
         mars.draw(gl, shaders, this, -step , modelviewmatrixSphere); 
-        ball.draw(gl, shaders, this, -step, null);
-        armaBall.draw(gl, shaders, this, step, null, rebound);
+        ball.draw(gl, shaders, this, -step, modelviewmatrix);
+        armaBall.draw(gl, shaders, this, step, modelviewmatrix, rebound);
         //*****************************************
-        pyramide.draw(gl, shaders, this, step, MyGLRenderer.yellow);
+        pyramide.draw(gl, shaders, modelviewmatrix, step, MyGLRenderer.yellow);
         
         armadillo1.draw(gl, shaders, modelviewmatrix, 0F, MyGLRenderer.white, this);
         
@@ -240,14 +251,83 @@ public class Scene
         armadillo1.draw(gl, shaders, modelviewmatrixSphereArmadillo, (float) Math.PI, MyGLRenderer.red, this);
         
         MainActivity.log("Rendering terminated.");
-    }    
+    } 
     
-    public void makeReflextion(Matrix4 m) {
+    
+    public void drawReflected(GL2 gl, LightingShaders shaders, Matrix4 modelviewmatrix)
+    {
+
+        
+        // Place viewer in the right position and orientation
+        modelviewmatrix.loadIdentity();
+        shaders.setViewPos(new float [] {x, y, z});
+        // rotation
+        modelviewmatrix.rotate(anglex , -1.0F,0.0F,0.0F);
+        modelviewmatrix.rotate(angley , 0.0F,-1.0F,0.0F);        
+        //translation
+        modelviewmatrix.translate(x,y,z);  
+        
+        
+        makeReflextion(modelviewmatrix, true);
+
+        // application
+        shaders.setModelViewMatrix(modelviewmatrix.getMatrix());
+        // afficher la room avec un plafond rouge, un sol bleu et les murs en gris,    decommentez pour tracer les triangles en jaune
+        room.draw(gl, shaders, MyGLRenderer.red, MyGLRenderer.blue, MyGLRenderer.gray /*, MyGLRenderer.yellow*/); 
+        
+        
+        //************** ROOM 2 *******************
+        Matrix4 modelviewmatrix2=new Matrix4();
+        modelviewmatrix2.loadIdentity();
+        modelviewmatrix2.multMatrix(modelviewmatrix);
+        modelviewmatrix2.rotate((float) Math.PI, 0.0F,1.0F,0.0F); // faire tourner de 180 deg
+        modelviewmatrix2.translate(0,0,wallsize*2 + 0.001F);// la faire deplacer de la taille d'un mur + un petit espacement
+        
+        
+        shaders.setModelViewMatrix(modelviewmatrix2.getMatrix());
+        room.draw(gl, shaders, MyGLRenderer.yellow, MyGLRenderer.orange, MyGLRenderer.gray);
+        
+        //*****************************************
+        
+        
+        //************** SPHERE  *******************
+        Matrix4 modelviewmatrixSphere = new Matrix4();
+        modelviewmatrixSphere.loadIdentity();
+        modelviewmatrixSphere.multMatrix(modelviewmatrix);
+        modelviewmatrixSphere.translate(0,1,-wallsize*2);//translation par rapport à la vue
+        modelviewmatrixSphere.rotate(step, 0, 1, 0);
+        
+        shaders.setModelViewMatrix(modelviewmatrixSphere.getMatrix());
+        sun.draw(gl, shaders, MyGLRenderer.yellow, MyGLRenderer.black);
+        
+        
+        //************** BALLS  *******************
+        earth.draw(gl, shaders, this, step , modelviewmatrixSphere );
+        mars.draw(gl, shaders, this, -step , modelviewmatrixSphere); 
+        ball.draw(gl, shaders, this, -step, modelviewmatrix);
+        armaBall.draw(gl, shaders, this, step, modelviewmatrix, rebound);
+        //*****************************************
+        pyramide.draw(gl, shaders, modelviewmatrix, step, MyGLRenderer.yellow);
+        
+        armadillo1.draw(gl, shaders, modelviewmatrix, 0F, MyGLRenderer.white, this);
+        
+        Matrix4 modelviewmatrixSphereArmadillo = new Matrix4();
+        modelviewmatrixSphereArmadillo.loadIdentity();
+        modelviewmatrixSphereArmadillo.multMatrix(modelviewmatrix);
+        modelviewmatrixSphereArmadillo.translate(0,0,-6);//translation par rapport à la vue
+        shaders.setModelViewMatrix(modelviewmatrixSphereArmadillo.getMatrix());
+        armadillo1.draw(gl, shaders, modelviewmatrixSphereArmadillo, (float) Math.PI, MyGLRenderer.red, this);
+        
+        
+    } 
+    
+    public void makeReflextion(Matrix4 m, Boolean reflect) {
         m.loadIdentity();
         
         m.rotate(anglex,-0.1F,0.F,0.0F);
         m.rotate(angley,0.0F,-0.1F,0.0F);
         m.translate(x,y,z);
-        m.scale(1, -1, 1);
+        if (reflect)
+            m.scale(1, -1, 1);
     }
 }

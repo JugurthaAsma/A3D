@@ -301,11 +301,8 @@ public class MyVBO {
 
             for (int j = 0; j < 3; j++) {
                 normals[3 * shortTriangles[i + j]] = vec3f.x;
-                //Log.d("NML", (3 * triangles[i + j]) + ") X: " + vec3f.x);
                 normals[3 * shortTriangles[i + j] + 1] = vec3f.y;
-                //Log.d("NML", (3 * triangles[i + j] + 1) + ") Y: " + vec3f.y);
                 normals[3 * shortTriangles[i + j] + 2] = vec3f.z;
-                //Log.d("NML", (3 * triangles[i + j] + 2) + ") Z: " + vec3f.z);
             }
         }
     }
