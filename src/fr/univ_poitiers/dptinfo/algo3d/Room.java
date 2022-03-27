@@ -6,12 +6,11 @@
 package fr.univ_poitiers.dptinfo.algo3d;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.texture.Texture;
+import static fr.univ_poitiers.dptinfo.algo3d.Scene.wallheight;
+import static fr.univ_poitiers.dptinfo.algo3d.Scene.wallsize;
 
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
 
 
 /**
@@ -41,6 +40,18 @@ public class Room {
     private final Texture wallTexture;
     private final Texture ceillingTexture;
     private final Texture floorTexture;
+    
+    
+    
+    Vec3f a1 = new Vec3f(-wallsize, 0f, wallsize);
+    Vec3f b1 = new Vec3f(wallsize, 0f, wallsize);
+    Vec3f c1 = new Vec3f(wallsize, wallheight, wallsize);
+    Vec3f d1 = new Vec3f(-wallsize, wallheight, wallsize);
+
+    Vec3f a2 = new Vec3f(-wallsize, 0f, -wallsize);
+    Vec3f b2 = new Vec3f(wallsize, 0f, -wallsize);
+    Vec3f c2 = new Vec3f(wallsize, wallheight, -wallsize);
+    Vec3f d2 = new Vec3f(-wallsize, wallheight, -wallsize);
    
     
     
@@ -55,7 +66,23 @@ public class Room {
     Vec3f r2 = new Vec3f(0.5f, 1.5f, -Scene.wallsize /*-3f*/);
     Vec3f r3 = new Vec3f(0.5f, Scene.wallheight, -Scene.wallsize /*-3f*/);
     
-    public Room(final GL2 gl, final Vec3f a1, final Vec3f b1, final Vec3f c1, final Vec3f d1, final Vec3f a2, final Vec3f b2, final Vec3f c2, final Vec3f d2){
+    public Room(final GL2 gl){
+
+        initVertexpos();
+        initTriangles();
+        initTextures();
+        
+        wallTexture = MyGLRenderer.loadTexture(gl, "wall.jpg");
+        ceillingTexture = MyGLRenderer.loadTexture(gl, "tiles1.jpg");
+        floorTexture = MyGLRenderer.loadTexture(gl, "marble1.jpg");
+
+        wallsVbo = new MyVBO(gl, vertexpos, wallsTsriangles, textures);
+        ceillingVbo = new MyVBO(gl, vertexpos, ceillingTriangles, textures);
+        floorVbo = new MyVBO(gl, vertexpos, floorTriangles, textures);
+        //bordersVbo = new MyVBO(gl, vertexpos, bordersLines);
+    }
+    
+    private void initVertexpos() {
         vertexpos = new float[]{
             // frontWall
             
@@ -139,6 +166,37 @@ public class Room {
             9,8,10,
             11,10,8,
         };
+    }
+    
+    private void initTriangles() {
+        wallsTsriangles = new short[]{
+            
+            // frontWall
+            // left
+            0,1,2,
+            3,0,2,
+            
+            // right
+            4,5,6,
+            7,4,6,
+            
+            // upper
+            28,29,30,
+            31,28,30,
+            
+            
+            // righttWall
+            14,15,13,
+            13,15,12,
+
+            // lefttWall
+            17,19,16,
+            18,19,17,
+            
+            // backWall
+            9,8,10,
+            11,10,8,
+        };
         
         ceillingTriangles = new short[]{
             27,26,24,
@@ -176,7 +234,9 @@ public class Room {
             14,15,
             
         };
-        
+    }
+    
+    private void initTextures() {
         textures = new float[] {
             // frontWall
             
@@ -231,18 +291,6 @@ public class Room {
             0, 0.4F,
             0.4F, 0.4F,
         };
-        
-        
-        wallTexture = MyGLRenderer.loadTexture(gl, "wall.jpg");
-        ceillingTexture = MyGLRenderer.loadTexture(gl, "tiles1.jpg");
-        floorTexture = MyGLRenderer.loadTexture(gl, "marble1.jpg");
-
-        wallsVbo = new MyVBO(gl, vertexpos, wallsTsriangles, textures);
-        ceillingVbo = new MyVBO(gl, vertexpos, ceillingTriangles, textures);
-        floorVbo = new MyVBO(gl, vertexpos, floorTriangles, textures);
-        //bordersVbo = new MyVBO(gl, vertexpos, bordersLines);
-        
-
     }
     
     public void draw(final GL2 gl,final LightingShaders shaders, final float[] colorCeilling, final float[] colorFloor, final float[] colorWalls, final float[] linesColor){  

@@ -144,22 +144,24 @@ public class MyGLSurfaceView extends JPanel
                             this.scene.angley = 0;
                             break;
                             
-                            
                         // for the .obj
-                        case 'i' :
+                        case 'Z' :
                             scene.objZ -= (Math.cos(scene.angley) * speed);
                             scene.objX -= (Math.sin(scene.angley) * speed); break;
-                        case 'k' :
+                        case 'S' :
                             scene.objZ += (Math.cos(scene.angley) * speed);
                             scene.objX += (Math.sin(scene.angley) * speed); break;
-                        case 'j' :
+                        case 'Q' :
                             scene.objZ += (Math.sin(scene.angley) * speed);
                             scene.objX -= (Math.cos(scene.angley) * speed); break;
-                        case 'l' :
+                        case 'D' :
                             scene.objZ -= (Math.sin(scene.angley) * speed);
                             scene.objX += (Math.cos(scene.angley) * speed); break;
                         case 'o' :
                             scene.objRotate += 0.05F; break;
+                            
+                        case 'l' :
+                            scene.interupteur = !scene.interupteur; break;
                             
                         default:
                             break;

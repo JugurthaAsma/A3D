@@ -2,7 +2,6 @@ package fr.univ_poitiers.dptinfo.algo3d;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.math.Matrix4;
-import com.jogamp.opengl.util.texture.Texture;
 import fr.univ_poitiers.dptinfo.algo3d.Ball.SphereType;
 
 /**
@@ -38,7 +37,7 @@ public class Scene
     Ball earth, mars, ball, armaBall;
     
     Pyramide pyramide;
-    
+    /*
     Vec3f a1 = new Vec3f(-wallsize, 0f, wallsize);
     Vec3f b1 = new Vec3f(wallsize, 0f, wallsize);
     Vec3f c1 = new Vec3f(wallsize, wallheight, wallsize);
@@ -48,7 +47,7 @@ public class Scene
     Vec3f b2 = new Vec3f(wallsize, 0f, -wallsize);
     Vec3f c2 = new Vec3f(wallsize, wallheight, -wallsize);
     Vec3f d2 = new Vec3f(-wallsize, wallheight, -wallsize);
-
+*/
     /**
      * An angle used to animate the viewer
      */
@@ -79,7 +78,7 @@ public class Scene
 
         // Init observer's view angles
         angley=0.F;
-
+        /*
         // Create the front wall
         this.wall1=new Quad(a2 , b2, c2, d2); 
 
@@ -97,6 +96,7 @@ public class Scene
 
         // Create the ceiling of the room
         this.ceiling=new Quad(d2, c2, c1, d1);
+        */
     }       
 
     /**
@@ -111,7 +111,6 @@ public class Scene
         
         LightingShaders shaders=renderer.getShaders();
         
-        
         shaders.setAmbiantLight(MyGLRenderer.darkgray);
         shaders.setLightColor(MyGLRenderer.lightgray);
         shaders.setLightSpecular(MyGLRenderer.white);
@@ -123,7 +122,7 @@ public class Scene
         shaders.setNormalizing(true);
         //shaders.setIsTexture(true); // chaque objet fait ce qu'il faut
 
-        room = new Room(gl, a1, b1, c1, d1, a2, b2, c2, d2);
+        room = new Room(gl);
         
         sun = new Sphere(gl,7);
         earth = new Ball(gl, 3f, 0f, 0.3f, MyGLRenderer.cyan, SphereType.subdivision);
@@ -145,7 +144,7 @@ public class Scene
         // Set the background frame color
         gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         // Allow back face culling !!
-        gl.glEnable(GL2.GL_CULL_FACE);
+        //gl.glEnable(GL2.GL_CULL_FACE);
         MainActivity.log("Graphics initialized");
 }
 
@@ -178,7 +177,8 @@ public class Scene
         
         Matrix4 modelviewmatrix=new Matrix4();
         // Get shader to send uniform data
-        /*NoLightShaders*/ LightingShaders shaders=renderer.getShaders();
+        LightingShaders shaders=renderer.getShaders();
+        shaders.setLighting(interupteur);
         // Place viewer in the right position and orientation
         modelviewmatrix.loadIdentity();
         shaders.setViewPos(new float [] {x, y, z});
@@ -186,12 +186,13 @@ public class Scene
         modelviewmatrix.rotate(anglex , -1.0F,0.0F,0.0F);
         modelviewmatrix.rotate(angley , 0.0F,-1.0F,0.0F);        
         //translation
-        modelviewmatrix.translate(x,y,z);        
+        modelviewmatrix.translate(x,y,z);  
+        
+        
+        makeReflextion(modelviewmatrix);
+
         // application
         shaders.setModelViewMatrix(modelviewmatrix.getMatrix());
-        
-        shaders.setLighting(interupteur);
-
         // afficher la room avec un plafond rouge, un sol bleu et les murs en gris,    decommentez pour tracer les triangles en jaune
         room.draw(gl, shaders, MyGLRenderer.red, MyGLRenderer.blue, MyGLRenderer.gray /*, MyGLRenderer.yellow*/); 
         
@@ -201,10 +202,12 @@ public class Scene
         modelviewmatrix2.loadIdentity();
         modelviewmatrix2.multMatrix(modelviewmatrix);
         modelviewmatrix2.rotate((float) Math.PI, 0.0F,1.0F,0.0F); // faire tourner de 180 deg
-        modelviewmatrix2.translate(0,0,wallsize*2);// la faire deplacer de la taille d'un mur
+        modelviewmatrix2.translate(0,0,wallsize*2 + 0.001F);// la faire deplacer de la taille d'un mur + un petit espacement
+        
         
         shaders.setModelViewMatrix(modelviewmatrix2.getMatrix());
         room.draw(gl, shaders, MyGLRenderer.yellow, MyGLRenderer.orange, MyGLRenderer.gray);
+        
         //*****************************************
         
         
@@ -214,6 +217,7 @@ public class Scene
         modelviewmatrixSphere.multMatrix(modelviewmatrix);
         modelviewmatrixSphere.translate(0,1,-wallsize*2);//translation par rapport à la vue
         modelviewmatrixSphere.rotate(step, 0, 1, 0);
+        
         shaders.setModelViewMatrix(modelviewmatrixSphere.getMatrix());
         sun.draw(gl, shaders, MyGLRenderer.yellow, MyGLRenderer.black);
         
@@ -221,17 +225,12 @@ public class Scene
         //************** BALLS  *******************
         earth.draw(gl, shaders, this, step , modelviewmatrixSphere );
         mars.draw(gl, shaders, this, -step , modelviewmatrixSphere); 
-        
         ball.draw(gl, shaders, this, -step, null);
-        
         armaBall.draw(gl, shaders, this, step, null, rebound);
         //*****************************************
-        
         pyramide.draw(gl, shaders, this, step, MyGLRenderer.yellow);
         
         armadillo1.draw(gl, shaders, modelviewmatrix, 0F, MyGLRenderer.white, this);
-        
-        
         
         Matrix4 modelviewmatrixSphereArmadillo = new Matrix4();
         modelviewmatrixSphereArmadillo.loadIdentity();
@@ -243,4 +242,12 @@ public class Scene
         MainActivity.log("Rendering terminated.");
     }    
     
+    public void makeReflextion(Matrix4 m) {
+        m.loadIdentity();
+        
+        m.rotate(anglex,-0.1F,0.F,0.0F);
+        m.rotate(angley,0.0F,-0.1F,0.0F);
+        m.translate(x,y,z);
+        m.scale(1, -1, 1);
+    }
 }

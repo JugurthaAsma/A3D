@@ -56,7 +56,7 @@ public class Pyramide {
         faces = new MyVBO(gl, vertexpos, triangles);
     }
     
-    public void draw(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, Scene scene, float step, final float[] color) {
+    public void draw(final GL2 gl,final LightingShaders shaders, Scene scene, float step, final float[] color) {
         
         Matrix4 matrix = new Matrix4();
         
@@ -67,7 +67,6 @@ public class Pyramide {
         
         // rotation sur soit meme
         matrix.rotate(step * 5, 0.0F, -0.1F, 0.0F); 
-        
         
         //matrix.scale(0.2f, 0.2f, 0.2f);
         
