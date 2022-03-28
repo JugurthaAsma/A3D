@@ -75,28 +75,9 @@ public class Scene
      */
     public Scene()
     {
-
         // Init observer's view angles
         angley=0.F;
-        /*
-        // Create the front wall
-        this.wall1=new Quad(a2 , b2, c2, d2); 
 
-        // Create the right wall
-        this.wall2=new Quad(b2, b1, c1, c2); // horaire
-
-        // Create the left wall
-        this.wall3=new Quad(a1, a2, d2, d1); // anti-horaire
-
-        // create the back wall
-        this.wall4=new Quad(b1, a1, d1, c1); // horaire
-
-        // Create the floor of the room
-        this.floor=new Quad(a1, b1, b2, a2);
-
-        // Create the ceiling of the room
-        this.ceiling=new Quad(d2, c2, c1, d1);
-        */
     }       
 
     /**
@@ -205,7 +186,7 @@ public class Scene
         // application
         shaders.setModelViewMatrix(modelviewmatrix.getMatrix());
         // afficher la room avec un plafond rouge, un sol bleu et les murs en gris,    decommentez pour tracer les triangles en jaune
-        room.draw(gl, shaders, MyGLRenderer.red, MyGLRenderer.blue, MyGLRenderer.gray /*, MyGLRenderer.yellow*/); 
+        room.draw(gl, shaders, MyGLRenderer.red, MyGLRenderer.transparentblue, MyGLRenderer.gray /*, MyGLRenderer.yellow*/); 
         
         
         //************** ROOM 2 *******************
@@ -217,7 +198,7 @@ public class Scene
         
         
         shaders.setModelViewMatrix(modelviewmatrix2.getMatrix());
-        room.draw(gl, shaders, MyGLRenderer.yellow, MyGLRenderer.orange, MyGLRenderer.gray);
+        room.draw(gl, shaders, MyGLRenderer.yellow, MyGLRenderer.transparentorange, MyGLRenderer.gray);
         
         //*****************************************
         
@@ -273,7 +254,7 @@ public class Scene
         // application
         shaders.setModelViewMatrix(modelviewmatrix.getMatrix());
         // afficher la room avec un plafond rouge, un sol bleu et les murs en gris,    decommentez pour tracer les triangles en jaune
-        room.draw(gl, shaders, MyGLRenderer.red, MyGLRenderer.blue, MyGLRenderer.gray /*, MyGLRenderer.yellow*/); 
+        room.draw(gl, shaders, MyGLRenderer.red, MyGLRenderer.transparentblue, MyGLRenderer.gray /*, MyGLRenderer.yellow*/); 
         
         
         //************** ROOM 2 *******************
@@ -285,7 +266,7 @@ public class Scene
         
         
         shaders.setModelViewMatrix(modelviewmatrix2.getMatrix());
-        room.draw(gl, shaders, MyGLRenderer.yellow, MyGLRenderer.orange, MyGLRenderer.gray);
+        room.draw(gl, shaders, MyGLRenderer.yellow, MyGLRenderer.transparentorange, MyGLRenderer.gray);
         
         //*****************************************
         

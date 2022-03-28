@@ -315,7 +315,11 @@ public class Room {
     
     public void drawFloor(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, final float[] color, final float[] linesColor) {
         //shaders.setColor(color);
+        gl.glEnable(GL2.GL_BLEND);
+        gl.glBlendFunc(GL2.GL_SRC_ALPHA,GL2.GL_ONE_MINUS_SRC_ALPHA);
         floorVbo.draw(gl, shaders, GL2.GL_TRIANGLES, color, linesColor, floorTexture);
+        gl.glDisable(GL2.GL_BLEND);
+
     }
     
     public void drawWalls(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, final float[] color, final float[] linesColor) {

@@ -18,9 +18,9 @@ import java.io.InputStream;
 public class MyGLRenderer implements GLEventListener
 {	
 	static public final float[] black={0.F,0.F,0.F,1.F};
-	static public final float[] darkgray = { 0.2f,0.2f,0.2f };
-	static public final float[] gray = { 0.5f,0.5f,0.5f };
-	static public final float[] lightgray = { 0.8f,0.8f,0.8f };
+	static public final float[] darkgray = { 0.2f,0.2f,0.2f};
+	static public final float[] gray = { 0.5f,0.5f,0.5f};
+	static public final float[] lightgray = { 0.8f,0.8f,0.8f};
 	static public final float[] white={1.F,1.F,1.F,1.F};
 	static public final float[] red={1.F,0.F,0.F,1.F};
         static public final float[] lightred={1.F,0.F,0.F,0.01F};
@@ -30,6 +30,9 @@ public class MyGLRenderer implements GLEventListener
 	static public final float[] magenta={1.F,0.F,1.F,1.F};
 	static public final float[] cyan={0.F,1.F,1.F,1.F};
 	static public final float[] orange={1.F,0.5F,0.F,0.5F};
+
+	static public final float[] transparentblue={0.F,0.F,1.F,0.5F};
+	static public final float[] transparentorange={1.F,0.5F,0.F,0.5F};
 
 	/**
 	 * Reference to the scene environment
