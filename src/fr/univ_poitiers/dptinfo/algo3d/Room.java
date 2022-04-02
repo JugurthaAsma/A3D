@@ -303,17 +303,17 @@ public class Room {
    
     }
     
-    public void draw(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, final float[] colorCeilling, final float[] colorFloor, final float[] colorWalls) {
+    public void draw(final GL2 gl,final LightingShaders shaders, final float[] colorCeilling, final float[] colorFloor, final float[] colorWalls) {
         this.draw(gl, shaders, colorCeilling, colorFloor, colorWalls, null);
     }
     
-    public void drawCeilling(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, final float[] color, final float[] linesColor) {
+    public void drawCeilling(final GL2 gl,final LightingShaders shaders, final float[] color, final float[] linesColor) {
         
         //shaders.setColor(color);
         ceillingVbo.draw(gl, shaders, GL2.GL_TRIANGLES, color, linesColor, ceillingTexture);
     }
     
-    public void drawFloor(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, final float[] color, final float[] linesColor) {
+    public void drawFloor(final GL2 gl,final LightingShaders shaders, final float[] color, final float[] linesColor) {
         //shaders.setColor(color);
         gl.glEnable(GL2.GL_BLEND);
         gl.glBlendFunc(GL2.GL_SRC_ALPHA,GL2.GL_ONE_MINUS_SRC_ALPHA);
@@ -322,12 +322,12 @@ public class Room {
 
     }
     
-    public void drawWalls(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, final float[] color, final float[] linesColor) {
+    public void drawWalls(final GL2 gl,final LightingShaders shaders, final float[] color, final float[] linesColor) {
         //shaders.setColor(color);
         wallsVbo.draw(gl, shaders, GL2.GL_TRIANGLES, color, linesColor, wallTexture);
     }
 
-    public void drawBorders(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, final float[] color) {
+    public void drawBorders(final GL2 gl,final LightingShaders shaders, final float[] color) {
         //gl.glLineWidth(3);
         //shaders.setColor(color);
         bordersVbo.draw(gl, shaders, GL2.GL_LINES, color, null, null);

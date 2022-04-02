@@ -88,7 +88,7 @@ public class Pyramide {
         
         Matrix4 matrix = new Matrix4();
         matrix.multMatrix(medelViewMatrix);
-        matrix.translate( - 2 ,0 , 0);
+        matrix.translate(-2, 0.01F ,0);
         
         // rotation sur soit meme
         matrix.rotate(step * 5, 0.0F, -0.1F, 0.0F); 
@@ -97,6 +97,10 @@ public class Pyramide {
         
         shaders.setModelViewMatrix(matrix.getMatrix());
         //shaders.setColor(color);
+        gl.glEnable(GL2.GL_BLEND);
+        gl.glBlendFunc(GL2.GL_SRC_ALPHA,GL2.GL_ONE_MINUS_SRC_ALPHA);
         faces.draw(gl, shaders, GL2.GL_TRIANGLES, color, MyGLRenderer.black, null);
+        gl.glDisable(GL2.GL_BLEND);
+        
     }
 }

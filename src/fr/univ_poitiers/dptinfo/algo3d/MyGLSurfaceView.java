@@ -30,7 +30,7 @@ public class MyGLSurfaceView extends JPanel
 	/**
 	 * Framerate for animation. At least 25 for PAL, can be higher...
 	 */
-	static private final int FRAMERATE=25;
+	static private final int FRAMERATE=60;
 	private GLCanvas canvas; // JOGL canvas
 	private FPSAnimator fpsanimator;
 	/**

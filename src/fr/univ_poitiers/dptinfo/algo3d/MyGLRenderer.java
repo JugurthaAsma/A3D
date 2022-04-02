@@ -82,7 +82,7 @@ public class MyGLRenderer implements GLEventListener
 	/**
 	 * @return fragment and vertex shaders
 	 */
-	public /*NoLightShaders*/ LightingShaders getShaders()
+	public LightingShaders getShaders()
 	{
 		return shaders;
 	}

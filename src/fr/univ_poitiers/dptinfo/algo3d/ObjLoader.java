@@ -13,6 +13,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -43,6 +45,7 @@ public class ObjLoader{
         ArrayList<Float> vertexposArList = new ArrayList<>();
         ArrayList<Integer> trianglesArList = new ArrayList<>();
         ArrayList<Float> normalsArList = new ArrayList<>();
+        HashMap<Integer, Integer> normpos = new HashMap<>();
         
         try{
             // Le fichier d'entrée
@@ -55,14 +58,26 @@ public class ObjLoader{
                     vertexposArList.add(Float.parseFloat(dataLine[1]));
                     vertexposArList.add(Float.parseFloat(dataLine[2]));
                     vertexposArList.add(Float.parseFloat(dataLine[3]));
-                }else if(line.startsWith("f ")){
+                }else if(line.startsWith("f")){
                     String[] sommet1 = dataLine[1].split("/");
                     String[] sommet2 = dataLine[2].split("/");
                     String[] sommet3 = dataLine[3].split("/");
-                    trianglesArList.add(Integer.parseInt(sommet1[0])-1);
-                    trianglesArList.add(Integer.parseInt(sommet2[0])-1);
-                    trianglesArList.add(Integer.parseInt(sommet3[0])-1);
-                } else if(line.startsWith("vn ")) {
+                    
+                    int a = Integer.parseInt(sommet1[0])-1;
+                    int b = Integer.parseInt(sommet2[0])-1;
+                    int c = Integer.parseInt(sommet3[0])-1;
+                    
+                    trianglesArList.add(a);
+                    trianglesArList.add(b);
+                    trianglesArList.add(c);
+                    
+                    normpos.put(a, Integer.parseInt(sommet1[2]) - 1);
+                    normpos.put(a, Integer.parseInt(sommet2[2]) - 1);
+                    normpos.put(a, Integer.parseInt(sommet3[2]) - 1);
+                    
+                    
+                    
+                } else if(line.startsWith("vn")) {
                     normalsArList.add(Float.parseFloat(dataLine[1]));
                     normalsArList.add(Float.parseFloat(dataLine[2]));
                     normalsArList.add(Float.parseFloat(dataLine[3]));
@@ -79,11 +94,17 @@ public class ObjLoader{
                triangles[i] = trianglesArList.get(i);
             }
             
-            normals = new float[normalsArList.size()];
+            normals = new float[vertexposArList.size()];
+            /*
             for (int i = 0; i < normals.length; i++) {
                normals[i] = normalsArList.get(i);
             }
-            
+            */
+            for (Map.Entry<Integer, Integer> entry: normpos.entrySet()) {
+            normals[3 * entry.getKey()] = normalsArList.get(3 * entry.getValue());
+            normals[3 * entry.getKey() + 1] = normalsArList.get(3 * entry.getValue() + 1);
+            normals[3 * entry.getKey() + 2] = normalsArList.get(3 * entry.getValue() + 2);
+        }
         }catch(IOException e){
             e.printStackTrace();
         }      

@@ -68,7 +68,7 @@ public class Ball {
         sphere.draw(gl, shaders, color, MyGLRenderer.black); 
     }
    
-    public void draw(final GL2 gl,final /*NoLightShaders*/ LightingShaders shaders, Scene scene, float step, Matrix4 modelMatrix) {
+    public void draw(final GL2 gl,final LightingShaders shaders, Scene scene, float step, Matrix4 modelMatrix) {
         this.draw(gl, shaders, scene, step, modelMatrix, 0);
     }
     
