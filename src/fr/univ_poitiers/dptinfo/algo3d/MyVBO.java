@@ -82,6 +82,8 @@ public class MyVBO {
         nbIndices = intTriangles.length;
         shaderType = GL2.GL_UNSIGNED_INT;
         shaderSize = SIZEOF_INT;
+        
+        this.normals = normals;
     
         allocateVertexPosBuffer();
         allocateTriangleBuffer();
@@ -144,8 +146,6 @@ public class MyVBO {
         gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER,0); // Désactivation du buffer d’éléments
         // Désactivations nécessaires pour éviter de perturber les tracés suivants
     }
-    
-
     
     public void draw(final GL2 gl,final LightingShaders shaders, float[] objectColor, float[] linesColor, Texture texture){
         this.draw(gl, shaders, GL2.GL_TRIANGLES, objectColor, linesColor, texture);

@@ -87,6 +87,7 @@ public class Scene
         shaders.setLightSpecular(MyGLRenderer.white);
         shaders.setMaterialSpecular(MyGLRenderer.white);
         shaders.setMaterialShininess(1000);
+        shaders.setLightAttenuation(1.0f, 0.001f, 0.03f);
         
         float [] lightPos = {0f, 0f, 0f};
         shaders.setLightPosition(lightPos);
@@ -101,7 +102,7 @@ public class Scene
         ball = new Ball(gl, 0f, 4f, 0.5f, MyGLRenderer.magenta, SphereType.subdivision);
         armaBall = new Ball(gl, wallsize / 2, 0, 0.5f, MyGLRenderer.white, SphereType.coordinate);
         pyramide = new Pyramide(gl, 1, 1, 1);
-        armadillo1 = new ObjLoader(gl, "armadillo.obj", 0.8f, wallsize / 2, 0.8f, wallsize / 2);
+        armadillo1 = new ObjLoader(gl, "armadillo.obj", 10f, wallsize / 2, 1f, wallsize / 2);
         
         gl.glDepthFunc(GL2.GL_LESS);
         gl.glEnable(GL2.GL_DEPTH_TEST);
@@ -166,8 +167,6 @@ public class Scene
     
     public void drawObjects(GL2 gl, LightingShaders shaders, Matrix4 modelviewmatrix, Boolean reflect)
     {
-
-        
         // Place viewer in the right position and orientation
         modelviewmatrix.loadIdentity();
         shaders.setViewPos(new float [] {x, y, z});
@@ -176,10 +175,10 @@ public class Scene
         modelviewmatrix.rotate(angley , 0.0F,-1.0F,0.0F);        
         //translation
         modelviewmatrix.translate(x,y,z);  
+    
+        if (reflect)
+            modelviewmatrix.scale(1, -1, 1);
         
-        
-        makeReflextion(modelviewmatrix, reflect);
-
         // application
         shaders.setModelViewMatrix(modelviewmatrix.getMatrix());
         // afficher la room avec un plafond rouge, un sol bleu et les murs en gris,    decommentez pour tracer les triangles en jaune
@@ -219,7 +218,7 @@ public class Scene
         //*****************************************
         pyramide.draw(gl, shaders, modelviewmatrix, step, MyGLRenderer.yellow);
         
-        armadillo1.draw(gl, shaders, modelviewmatrix, 0F, MyGLRenderer.white, this);
+        armadillo1.draw(gl, shaders, modelviewmatrix, 0F, MyGLRenderer.blue, this);
         
         Matrix4 modelviewmatrixSphereArmadillo = new Matrix4();
         modelviewmatrixSphereArmadillo.loadIdentity();
@@ -230,14 +229,5 @@ public class Scene
         
         
     } 
-    
-    public void makeReflextion(Matrix4 m, Boolean reflect) {
-        m.loadIdentity();
-        
-        m.rotate(anglex,-0.1F,0.F,0.0F);
-        m.rotate(angley,0.0F,-0.1F,0.0F);
-        m.translate(x,y,z);
-        if (reflect)
-            m.scale(1, -1, 1);
-    }
+
 }

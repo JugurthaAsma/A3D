@@ -138,34 +138,6 @@ public class Room {
             l3.x, l3.y,l3.z,  // 31
         };
         
-        wallsTsriangles = new short[]{
-            
-            // frontWall
-            // left
-            0,1,2,
-            3,0,2,
-            
-            // right
-            4,5,6,
-            7,4,6,
-            
-            // upper
-            28,29,30,
-            31,28,30,
-            
-            
-            // righttWall
-            14,15,13,
-            13,15,12,
-
-            // lefttWall
-            17,19,16,
-            18,19,17,
-            
-            // backWall
-            9,8,10,
-            11,10,8,
-        };
     }
     
     private void initTriangles() {
@@ -242,15 +214,15 @@ public class Room {
             
             //left
             0, 0,
-            1, 0,
-            1, 1,
+            ((1.f/wallsize) * 2.5f), 0,
+            ((1.f/wallsize) * 2.5f), 1,
             0, 1,
             
             //right
-            0, 0,
+            ((1.f/wallsize) * 3.5f), 0,
             1, 0,
-            1, 1,
-            0, 1,
+            1, 1f,
+            ((1.f/wallsize) * 3.5f), 1f,
             
             // backWall
             0, 0,
@@ -286,10 +258,10 @@ public class Room {
             0, 1,
             
             // upper
-            0.4F, 0,
-            0, 0,
-            0, 0.4F,
-            0.4F, 0.4F,
+            ((1.f/wallsize) * 2.5f), 0.5f,
+            ((1.f/wallsize) * 3.5f), 0.5f,
+            ((1.f/wallsize) * 3.5f), 1,
+            ((1.f/wallsize) * 2.5f), 1,
         };
     }
     

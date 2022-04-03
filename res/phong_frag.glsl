@@ -42,20 +42,24 @@ void main(void) {
         vec3 lightdir=normalize(uLightPos - vVertexPosition.xyz);
         vec3 ViewDir=normalize(uViewPos - vVertexPosition.xyz);
 
+        // attenuation
+        float distance = length(uLightPos - vVertexPosition.xyz);
+        float attenuation = 1.0f / (uConstantAttenuation + (uLinearAttenuation * distance) + (uQuadraticAttenuation * pow(distance, 2)));
+
         //speculaire
         vec3 halfwayDir = normalize(lightdir+ViewDir);
-        vec4 specular = uLightSpecular * pow(max(dot(normal, halfwayDir),0.0),uMaterialShininess)* uMaterialSpecular;
-
+        vec4 specular = attenuation * (uLightSpecular * pow(max(dot(normal, halfwayDir),0.0),uMaterialShininess)* uMaterialSpecular);
+        
         //diffusion
         float weight = max(dot(normal, lightdir),0.0);
         vec4 diffuse = weight*uLightColor;
 
-
-        gl_FragColor = (uMaterialColor*texture)*(uAmbiantLight+diffuse)+ specular;
-        gl_FragColor.a=uMaterialColor.a;
+        gl_FragColor = (uMaterialColor*texture)*(uAmbiantLight+diffuse) * attenuation + specular;
+        
     }
     else{
         gl_FragColor = (uMaterialColor*texture);
-        gl_FragColor.a=uMaterialColor.a;
     }
+
+    gl_FragColor.a=uMaterialColor.a;
 }

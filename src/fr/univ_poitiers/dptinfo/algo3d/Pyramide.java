@@ -69,19 +69,14 @@ public class Pyramide {
             0, 1, 2,
             0, 2, 3,
               
-//            // faces
-//            5, 6, 7,
-//            8, 9, 10,
-//            11, 12, 13,
-//            14, 15, 16,
-//            
+            // faces
             7, 6, 5,
             10, 9, 8,
             13, 12, 11,
             16, 15, 14,
         };
             
-        faces = new MyVBO(gl, vertexpos, triangles);
+        faces = new MyVBO(gl, vertexpos, triangles, vertexpos);
     }
     
     public void draw(final GL2 gl,final LightingShaders shaders, Matrix4 medelViewMatrix, float step, final float[] color) {

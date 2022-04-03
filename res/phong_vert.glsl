@@ -8,7 +8,6 @@ attribute vec3 aVertexPosition;
 attribute vec3 aVertexNormal;
 attribute vec2 aTexCoord;
 
-// for each pixel
 varying vec4 vVertexPosition;
 varying vec3 vVertexNormal;
 varying vec2 vTexCoord;
